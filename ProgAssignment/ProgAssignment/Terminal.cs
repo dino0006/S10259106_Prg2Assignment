@@ -47,7 +47,7 @@ namespace ProgAssignment
         {
             foreach (var airline in airlines.Values)
             {
-                if (airline.Flights.Contains(flight))
+                if (airline.Flights.ContainsKey(flight.FlightNumber))
                     return airline;
             }
             return null;

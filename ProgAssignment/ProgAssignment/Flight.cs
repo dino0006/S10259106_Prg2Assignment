@@ -39,6 +39,9 @@ namespace ProgAssignment
             get { return status; }
             set { status = value; }
         }
+
+        public string FlightId { get; internal set; }
+
         public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available")
         {
             FlightNumber = flightNumber;
