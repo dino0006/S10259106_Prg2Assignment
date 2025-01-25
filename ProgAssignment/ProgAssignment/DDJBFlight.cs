@@ -1,16 +1,25 @@
-﻿public class DDJBFlight : Flight
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProgAssignment
 {
-    private double requestFee;
-    public double RequestFee
+    public class DDJBFlight : Flight
     {
-        get { return requestFee; }
-        set { requestFee = value; }
-    }
-    public override double CalculateFees()
-    {
-        return RequestFee;
-    }
-    public override string ToString
-    {
+        private double requestFee;
+        public double RequestFee
+        {
+            get { return requestFee; }
+            set { requestFee = value; }
+        }
+        public override double CalculateFees()
+        {
+            return RequestFee;
+        }
+        public override string ToString
+        {
         return 
+    }
     }
