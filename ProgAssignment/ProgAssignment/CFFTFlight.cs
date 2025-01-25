@@ -1,16 +1,25 @@
-﻿public class CFFTFlight : Flight
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProgAssignment
 {
-    private double requestFee;
-    public double requestFee
+    public class CFFTFlight : Flight
     {
-        get { return requestFee; }
-        set { requestFee = value; }
-    }
-    public override double CalculateFees()
-    {
-        return requestFee
-    }
-    public override string ToString()
-    {
-        return
+        private double requestFee;
+        public double requestFee
+        {
+            get { return requestFee; }
+            set { requestFee = value; }
+        }
+        public override double CalculateFees()
+        {
+            return requestFee
+        }
+        public override string ToString()
+        {
+            return
+        }
     }
