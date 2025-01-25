@@ -13,7 +13,7 @@
         set { origin = value; }
     }
     private string destination;
-    public string Destination;
+    public string Destination
     {
         get { return destination; }
         set { destination = value; } 
@@ -31,10 +31,9 @@
         get { return status; }
         set { status = value; }
     }
-    public Flight(string flightNumber, string airlineName, string origin, string destination, DateTime expectedTime, string status="Available")
+    public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status="Available")
     {
         FlightNumber = flightNumber;
-        AirlineName = airlineName;
         Origin = origin;
         Destination = destination;
         ExpectedTime = expectedTime;
