@@ -1,4 +1,9 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10259106E
+// Student Name : Ameenuddin
+// Partner Name : Guang Cheng
+//==========================================================
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,6 +98,68 @@ namespace ProgAssignment
             {
                 Console.WriteLine($"Error reading CSV file: {ex.Message}");
             }
+        }
+        public void LoadFlightFile(string filePath)
+        {
+            try
+            {
+                using (var reader = new StreamReader(filePath))
+                {
+                    string header = reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var parts = line.Split(',');
+                        string flightNumber = parts[0].Replace(" ", "");
+                        string origin = parts[1].Replace(" ", "");
+                        string destination = parts[2].Replace(" ", "");
+
+                        DateTime expectedTime;
+                        try
+                        {
+                            expectedTime = DateTime.ParseExact(parts[3].Replace(" ", ""), "h:mm tt", null);
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Invalid date format for flight {flightNumber}: {ex.Message}");
+                            continue;
+                        }
+
+                        string specialRequestCode = parts.Length > 4 ? parts[4].Replace(" ", "") : " ";
+
+                        Flight flight;
+                        switch (specialRequestCode)
+                        {
+                            case "CFFT":
+                                flight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
+                                break;
+                            case "LWTT":
+                                flight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
+                                break;
+                            case "DDJB":
+                                flight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
+                                break;
+                            default:
+                                flight = new NORMFlight(flightNumber, origin, destination, expectedTime);
+                                break;
+                        }
+
+                        if (!AddFlight(flight))
+                        {
+                            Console.WriteLine($"Failed to add flight {flight.FlightNumber}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error loading flights: " + ex.Message);
+            }
+        }
+
+        private bool AddFlight(Flight flight)
+        {
+            throw new NotImplementedException();
         }
     }
 }
