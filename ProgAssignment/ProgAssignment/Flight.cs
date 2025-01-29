@@ -3,11 +3,11 @@
 // Student Name : Ameenuddin
 // Partner Name : Guang Cheng
 //==========================================================
+//student id: s10266598d
+//student name: guangcheng
+//partner name: ameen
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using testnumber500;
 
 namespace ProgAssignment
 {
@@ -19,18 +19,21 @@ namespace ProgAssignment
             get { return flightNumber; }
             set { flightNumber = value; }
         }
+
         private string origin;
         public string Origin
         {
             get { return origin; }
             set { origin = value; }
         }
+
         private string destination;
         public string Destination
-    {
+        {
             get { return destination; }
             set { destination = value; }
         }
+
         private DateTime expectedTime;
         public DateTime ExpectedTime
         {
@@ -45,25 +48,36 @@ namespace ProgAssignment
             set { status = value; }
         }
 
-        public string FlightId { get; internal set; }
+        public string AssignedGate { get; internal set; }
 
-        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available")
+        private Airline airline;
+        public Airline Airline
+        {
+            get { return airline; }
+            set { airline = value; }
+        }
+
+        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", Airline airline = null)
         {
             FlightNumber = flightNumber;
             Origin = origin;
             Destination = destination;
             ExpectedTime = expectedTime;
             Status = status;
-
+            Airline = airline;
         }
 
         public abstract double CalculateFees();
 
         public override string ToString()
         {
-            return $"Flight: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, Status: {Status}";
+            if (Airline == null)
+            {
+                return $"Flight: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, Status: {Status}, Airline: N/A";
+            }
+            return $"Flight: {FlightNumber}, Origin: {Origin}, Destination: {Destination}, Status: {Status}, Airline: {Airline.Name}";
         }
-
     }
 }
+
 
