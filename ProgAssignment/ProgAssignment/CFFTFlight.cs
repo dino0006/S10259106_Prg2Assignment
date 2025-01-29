@@ -3,33 +3,24 @@
 // Student Name : Guang Cheng
 // Partner Name : Ameenuddin
 //==========================================================
+using ProgAssignment;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProgAssignment
+namespace testnumber500
 {
     public class CFFTFlight : Flight
     {
-        private double requestFee;
+        public double RequestFee { get; set; }
 
-        public double RequestFee
+        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", double requestFee = 0.0)
+            : base(flightNumber, origin, destination, expectedTime, status, airline: null)
         {
-            get { return requestFee; }
-            set { requestFee = value; }
-        }
-
-        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", double requestFee = 0.0) :
-            base(flightNumber, origin, destination, expectedTime, status)
-        {
-            this.requestFee = requestFee;
+            this.RequestFee = requestFee;
         }
 
         public override double CalculateFees()
         {
-            return requestFee;
+            return RequestFee;
         }
 
         public override string ToString()
