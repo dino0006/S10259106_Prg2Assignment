@@ -62,7 +62,6 @@ namespace ProgAssignment
             return false;
         }
 
-
         public Airline GetAirlineFromFlight(Flight flight)
         {
             foreach (var airline in airlines.Values)
@@ -86,68 +85,20 @@ namespace ProgAssignment
             return $"Terminal: {TerminalName}, Airlines: {airlines.Count}, Flights: {flights.Count}, Boarding Gates: {boardingGates.Count}";
         }
 
-        public void LoadBoardingGatesFromCsv(string filePath)
-        {
-            try
-            {
-                using (var reader = new StreamReader(filePath))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        var values = line.Split(',');
-                        if (values.Length != 4)
-                            continue;
-
-                        string gateName = values[0];
-                        bool supportsCFFT = bool.TryParse(values[1], out bool cfft) && cfft;
-                        bool supportsDDJB = bool.TryParse(values[2], out bool ddjb) && ddjb;
-                        bool supportsLWTT = bool.TryParse(values[3], out bool lwtt) && lwtt;
-
-                        BoardingGate gate = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
-                        AddBoardingGate(gate);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading CSV file: {ex.Message}");
-            }
-        }
-
 
         public void LoadFlightFile(string filePath)
         {
-            // Dictionary mapping airline codes to names
-            var airlineNames = new Dictionary<string, string>
-    {
-        { "SQ", "Singapore Airlines" },
-        { "MH", "Malaysia Airlines" },
-        { "JL", "Japan Airlines" },
-        { "CX", "Cathay Pacific" },
-        { "QF", "Qantas Airways" },
-        { "TR", "Scoot" },
-        { "EK", "Emirates" },
-        { "BA", "British Airways" },
-        { "AA", "American Airlines" }
-    };
-
             try
             {
                 using (var reader = new StreamReader(filePath))
                 {
-                    string header = reader.ReadLine(); // Skip header row
-
+                    string header = reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
                         var parts = line.Split(',');
 
-                        if (parts.Length < 4)
-                        {
-                            Console.WriteLine($"Invalid flight data: {line}");
-                            continue;
-                        }
+                        if (parts.Length < 4) continue;
 
                         string flightNumber = parts[0].Trim();
                         string origin = parts[1].Trim();
@@ -166,22 +117,9 @@ namespace ProgAssignment
 
                         string specialRequestCode = parts.Length > 4 ? parts[4].Trim() : "";
 
-                        // Extract airline code from flight number (first 2 characters)
-                        string airlineCode = flightNumber.Substring(0, 2);
+                        string airlineCode = flightNumber.Substring(0, 2).ToUpper();
+                        Airline airline = airlines.ContainsKey(airlineCode) ? airlines[airlineCode] : new Airline("Unknown", airlineCode);
 
-                        // Get airline name from dictionary or default to "Unknown Airline"
-                        string airlineName = airlineNames.ContainsKey(airlineCode) ? airlineNames[airlineCode] : "Unknown Airline";
-
-                        // Check if airline exists in dictionary, otherwise create it
-                        if (!airlines.ContainsKey(airlineCode))
-                        {
-                            airlines[airlineCode] = new Airline(airlineCode, airlineName);
-                            Console.WriteLine($"Created new airline: {airlineName} ({airlineCode})");
-                        }
-
-                        Airline airline = airlines[airlineCode];
-
-                        // Create the correct flight type based on special request
                         Flight flight;
                         switch (specialRequestCode)
                         {
@@ -199,12 +137,9 @@ namespace ProgAssignment
                                 break;
                         }
 
-                        // Assign flight to airline and add to flights dictionary
                         flight.Airline = airline;
-                        airline.Flights[flightNumber] = flight;
-                        flights[flightNumber] = flight;
-
-                        Console.WriteLine($"Loaded flight {flightNumber} ({airlineName}) from {origin} to {destination}.");
+                        AddFlight(flight);
+                        Console.WriteLine($"Flight {flightNumber} ({airline.Name}) loaded.");
                     }
                 }
             }
@@ -213,11 +148,6 @@ namespace ProgAssignment
                 Console.WriteLine("Error loading flights: " + ex.Message);
             }
         }
-
-
-
-
-
 
         public void CalculateAndPrintAirlineFees()
         {
@@ -244,7 +174,6 @@ namespace ProgAssignment
             }
         }
 
-
         public void ListAllFlights()
         {
             Console.WriteLine("\n=============================================");
@@ -270,46 +199,71 @@ namespace ProgAssignment
             }
         }
 
+        private const string BoardingGatesFilePath = "boardinggates.csv"; 
 
-
-
-
-        public void AssignBoardingGateToFlight(string flightNumber, string gateName)
+        public void LoadBoardingGatesFromCsv()
         {
-            if (!flights.ContainsKey(flightNumber))
+            try
             {
-                Console.WriteLine("Flight not found.");
-                return;
+                using (var reader = new StreamReader(BoardingGatesFilePath)) 
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var values = line.Split(',');
+                        if (values.Length != 4)
+                            continue;
+
+                        string gateName = values[0];
+                        bool supportsCFFT = bool.TryParse(values[1], out bool cfft) && cfft;
+                        bool supportsDDJB = bool.TryParse(values[2], out bool ddjb) && ddjb;
+                        bool supportsLWTT = bool.TryParse(values[3], out bool lwtt) && lwtt;
+
+                        BoardingGate gate = new BoardingGate(gateName, supportsCFFT, supportsDDJB, supportsLWTT);
+                        AddBoardingGate(gate);
+                    }
+                }
             }
-
-            var flight = flights[flightNumber];
-
-            if (!boardingGates.ContainsKey(gateName))
+            catch (Exception ex)
             {
-                Console.WriteLine("Invalid Boarding Gate.");
-                return;
-            }
-
-            var gate = boardingGates[gateName];
-
-            if (gate.AssignedFlight != null)
-            {
-                Console.WriteLine($"Gate {gateName} is already assigned to another flight.");
-                return;
-            }
-
-            gate.AssignFlight(flight);
-            Console.WriteLine($"Gate {gateName} has been assigned to flight {flightNumber}.");
-
-            Console.Write("Would you like to update the status of the flight (Y/N)? ");
-            if (Console.ReadLine().Trim().ToUpper() == "Y")
-            {
-                Console.WriteLine("Select a new status: Delayed, Boarding, On Time");
-                string newStatus = Console.ReadLine().Trim();
-                flight.Status = newStatus;
-                Console.WriteLine($"Status updated to {newStatus}");
+                Console.WriteLine($"Error reading CSV file: {ex.Message}");
             }
         }
+    }
+
+    public void ListBoardingGates()
+        {
+            Console.WriteLine("\n=============================================");
+            Console.WriteLine($"List of Boarding Gates for {TerminalName}");
+            Console.WriteLine("=============================================");
+
+            // Print the headers for DDJB, CFFT, and LWTT
+            Console.WriteLine($"{"Gate Name",-15} {"DDJB",-20} {"CFFT",-20} {"LWTT",-20}");
+            Console.WriteLine(new string('=', 80));
+
+            foreach (var gate in boardingGates.Values)
+            {
+                // Print gate and its supports for each flight type
+                Console.WriteLine($"{gate.GateName,-15} {gate.SupportsDDJB,-20} {gate.SupportsCFFT,-20} {gate.SupportsLWTT,-20}");
+            }
+        }
+
+
+
+        private bool IsGateAssignedToFlight(string gate, string flightType)
+        {
+            // Check if the gate is assigned to any flight of the given flight type (DDJB, CFFT, LWTT)
+            foreach (var flight in flights.Values)
+            {
+                if (flight.BoardingGate == gate && flight.SpecialRequestCode == flightType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
 
         public void CreateNewFlight()
@@ -318,7 +272,7 @@ namespace ProgAssignment
             string flightNumber = Console.ReadLine();
 
             Console.Write("Enter Airline Code (e.g., SQ, MH, CX): ");
-            string airlineCode = Console.ReadLine().ToUpper(); 
+            string airlineCode = Console.ReadLine().ToUpper();
 
             Console.Write("Enter Origin: ");
             string origin = Console.ReadLine();
@@ -340,126 +294,32 @@ namespace ProgAssignment
                 status = "Available";
             }
 
-            
             Airline airline = null;
             if (airlines.ContainsKey(airlineCode))
             {
-                airline = airlines[airlineCode];  
+                airline = airlines[airlineCode];
             }
             else
             {
                 Console.WriteLine($"⚠ Airline code '{airlineCode}' not found! Using 'N/A'.");
-                airline = new Airline("Unknown", "N/A"); 
+                airline = new Airline("Unknown", "N/A");
             }
 
-            
             Flight newFlight = new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 0.0)
             {
-                Airline = airline  
+                Airline = airline
             };
 
-            
             flights[flightNumber] = newFlight;
             Console.WriteLine("\n Flight Created Successfully!");
         }
 
-
         public void SaveFlightToFile(Flight flight)
         {
             string filePath = "flights.csv";
-            using (StreamWriter sw = File.AppendText(filePath))
+            using (StreamWriter writer = new StreamWriter(filePath, true))
             {
-                string flightData = $"{flight.FlightNumber},{flight.Origin},{flight.Destination},{flight.ExpectedTime:hh:mm tt},{flight.Status}";
-                sw.WriteLine(flightData);
+                writer.WriteLine($"{flight.FlightNumber},{flight.Origin},{flight.Destination},{flight.ExpectedTime:HH:mm},{flight.Status}");
             }
         }
-        public void DisplayAirlineFlights()
-        {
-            Console.Write("Enter Airline Code: ");
-            string airlineCode = Console.ReadLine();
-
-            if (airlines.ContainsKey(airlineCode))
-            {
-                Airline airline = airlines[airlineCode];
-                Console.WriteLine($"\n=============================================");
-                Console.WriteLine($"Flights for {airline.Name}");
-                Console.WriteLine("=============================================");
-                foreach (var flight in airline.Flights.Values)
-                {
-                    Console.WriteLine($"Flight Number: {flight.FlightNumber}, Origin: {flight.Origin}, Destination: {flight.Destination}, Expected Time: {flight.ExpectedTime}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Airline not found.");
-            }
-        }
-        public void ModifyFlightDetails()
-        {
-            Console.Write("Enter Flight Number to modify: ");
-            string flightNumber = Console.ReadLine();
-
-            if (!flights.ContainsKey(flightNumber))
-            {
-                Console.WriteLine("Flight not found.");
-                return;
-            }
-
-            Flight flight = flights[flightNumber];
-            Console.WriteLine($"Current Flight Details: {flight}");
-
-            Console.Write("Enter new status (or leave blank to keep current): ");
-            string newStatus = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newStatus))
-            {
-                flight.Status = newStatus;
-            }
-
-            Console.Write("Enter new expected time (hh:mm tt) or leave blank to keep current: ");
-            string newTimeInput = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newTimeInput))
-            {
-                try
-                {
-                    flight.ExpectedTime = DateTime.ParseExact(newTimeInput, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture);
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Invalid time format. Keeping current time.");
-                }
-            }
-
-            Console.WriteLine("Flight details updated.");
-        }
-
-        public void DisplayFlightSchedule()
-        {
-            Console.WriteLine("\n=============================================");
-            Console.WriteLine("Flight Schedule for " + TerminalName);
-            Console.WriteLine("=============================================");
-            Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
-
-            foreach (var flight in flights.Values)
-            {
-                Console.WriteLine($"{flight.FlightNumber}          {flight.Airline.Name}        {flight.Origin}            {flight.Destination}           {flight.ExpectedTime:dd/MM/yyyy hh:mm:ss tt}");
-            }
-        }
-        public void ListBoardingGates()
-        {
-            Console.WriteLine("\n=============================================");
-            Console.WriteLine("List of Boarding Gates for " + TerminalName);
-            Console.WriteLine("=============================================");
-            Console.WriteLine("Gate Name       Supports CFFT   Supports DDJB   Supports LWTT");
-
-            foreach (var gate in boardingGates.Values)
-            {
-                Console.WriteLine($"{gate.GateName}         {gate.SupportsCFFT}             {gate.SupportsDDJB}              {gate.SupportsLWTT}");
-            }
-        }
-
-
-
-
     }
-}
-

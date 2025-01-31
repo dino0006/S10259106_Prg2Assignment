@@ -57,14 +57,18 @@ namespace ProgAssignment
             set { airline = value; }
         }
 
-        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", Airline airline = null)
+        public string FlightId { get; internal set; }
+        public string SpecialRequestCode { get; internal set; }
+        public string BoardingGate { get; internal set; }
+
+        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, Airline airline, string status = "Available")
         {
             FlightNumber = flightNumber;
             Origin = origin;
             Destination = destination;
             ExpectedTime = expectedTime;
-            Status = status;
             Airline = airline;
+            Status = status;
         }
 
         public abstract double CalculateFees();
