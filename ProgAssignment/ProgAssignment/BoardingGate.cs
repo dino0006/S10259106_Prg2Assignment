@@ -15,7 +15,7 @@ namespace ProgAssignment
     {
         public string GateName { get; private set; }
         private bool supportsCFFT;
-        private bool supportsDJDB;
+        private bool supportsDDJB;
         private bool supportsLWTT;
         private Flight flight;
 
@@ -23,7 +23,7 @@ namespace ProgAssignment
         {
             GateName = name;
             supportsCFFT = cfft;
-            supportsDJDB = djdb;
+            supportsDDJB = djdb;
             supportsLWTT = lwtt;
             flight = null;
         }
@@ -32,14 +32,14 @@ namespace ProgAssignment
         {
             double fee = 0.0;
             if (supportsCFFT) fee += 50.0;
-            if (supportsDJDB) fee += 30.0;
+            if (supportsDDJB) fee += 30.0;
             if (supportsLWTT) fee += 20.0; 
             return fee;
         }
 
         public override string ToString()
         {
-            return $"Gate: {GateName}, Supports CFFT: {supportsCFFT}, Supports DJDB: {supportsDJDB}, Supports LWTT: {supportsLWTT}, Assigned Flight: {(flight != null ? flight.FlightId : "None")}";
+            return $"Gate: {GateName}, Supports CFFT: {supportsCFFT}, Supports DDJB: {supportsDDJB}, Supports LWTT: {supportsLWTT}, Assigned Flight: {(flight != null ? flight.FlightId : "None")}";
         }
 
         public void AssignFlight(Flight assignedFlight)
