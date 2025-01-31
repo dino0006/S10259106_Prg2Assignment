@@ -455,7 +455,7 @@ namespace ProgAssignment
 
             foreach (var gate in boardingGates.Values)
             {
-                Console.WriteLine($"{gate.GateName}         {gate.SupportsCFFT}             {gate.SupportsDDJB}              {gate.SupportsLWTT}");
+                Console.WriteLine(value: $"{gate.GateName}         {gate.supportsCFFT}             {gate.supportsDDJB}              {gate.supportsLWTT}");
             }
         }
 

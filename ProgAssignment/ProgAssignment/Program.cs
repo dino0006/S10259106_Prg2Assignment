@@ -1,7 +1,7 @@
 ﻿using ProgAssignment;
 using static ProgAssignment.Terminal;
 
-/*var airlines = new Dictionary<string, Airline>();
+var airlines = new Dictionary<string, Airline>();
 var boardingGates = new Dictionary<string, BoardingGate>();
 
 Console.WriteLine("Loading Airlines...");
@@ -41,17 +41,7 @@ using (var lines = new StreamReader("boardinggates.csv"))
     }
 }
 
-Console.WriteLine($"{boardingGates.Count} Boarding Gates Loaded!");*/
-static void Main(string[] args)
-{
-    FlightManager manager = new FlightManager();
-
-    // Make sure to provide the path to your CSV file here
-    manager.LoadFlightFile("flights.csv");
-
-    // Listing all flights
-    manager.ListAllFlights();
-}
+Console.WriteLine($"{boardingGates.Count} Boarding Gates Loaded!");
 
 try
 {

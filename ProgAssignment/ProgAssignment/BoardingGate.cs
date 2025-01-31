@@ -14,9 +14,11 @@ namespace ProgAssignment
     public class BoardingGate
     {
         public string GateName { get; private set; }
-        private bool supportsCFFT;
-        private bool supportsDDJB;
-        private bool supportsLWTT;
+        public object AssignedFlight { get; internal set; }
+
+        public bool supportsCFFT;
+        public bool supportsDDJB;
+        public bool supportsLWTT;
         private Flight flight;
 
         public BoardingGate(string name, bool cfft, bool djdb, bool lwtt)
