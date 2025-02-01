@@ -5,7 +5,9 @@
 //==========================================================
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using testnumber500;
 
 namespace ProgAssignment
@@ -87,5 +89,114 @@ namespace ProgAssignment
     }
 }
 
+            
+            Flight newFlight = new DDJBFlight(flightNumber, origin, destination, expectedTime, status, 0.0)
+            {
+                Airline = airline  
+            };
 
-        
+            
+            flights[flightNumber] = newFlight;
+            Console.WriteLine("\n Flight Created Successfully!");
+        }
+
+
+        public void SaveFlightToFile(Flight flight)
+        {
+            string filePath = "flights.csv";
+            using (StreamWriter sw = File.AppendText(filePath))
+            {
+                string flightData = $"{flight.FlightNumber},{flight.Origin},{flight.Destination},{flight.ExpectedTime:hh:mm tt},{flight.Status}";
+                sw.WriteLine(flightData);
+            }
+        }
+        public void DisplayAirlineFlights()
+        {
+            Console.Write("Enter Airline Code: ");
+            string airlineCode = Console.ReadLine();
+
+            if (airlines.ContainsKey(airlineCode))
+            {
+                Airline airline = airlines[airlineCode];
+                Console.WriteLine($"\n=============================================");
+                Console.WriteLine($"Flights for {airline.Name}");
+                Console.WriteLine("=============================================");
+                foreach (var flight in airline.Flights.Values)
+                {
+                    Console.WriteLine($"Flight Number: {flight.FlightNumber}, Origin: {flight.Origin}, Destination: {flight.Destination}, Expected Time: {flight.ExpectedTime}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Airline not found.");
+            }
+        }
+        public void ModifyFlightDetails()
+        {
+            Console.Write("Enter Flight Number to modify: ");
+            string flightNumber = Console.ReadLine();
+
+            if (!flights.ContainsKey(flightNumber))
+            {
+                Console.WriteLine("Flight not found.");
+                return;
+            }
+
+            Flight flight = flights[flightNumber];
+            Console.WriteLine($"Current Flight Details: {flight}");
+
+            Console.Write("Enter new status (or leave blank to keep current): ");
+            string newStatus = Console.ReadLine();
+            if (!string.IsNullOrEmpty(newStatus))
+            {
+                flight.Status = newStatus;
+            }
+
+            Console.Write("Enter new expected time (hh:mm tt) or leave blank to keep current: ");
+            string newTimeInput = Console.ReadLine();
+            if (!string.IsNullOrEmpty(newTimeInput))
+            {
+                try
+                {
+                    flight.ExpectedTime = DateTime.ParseExact(newTimeInput, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid time format. Keeping current time.");
+                }
+            }
+
+            Console.WriteLine("Flight details updated.");
+        }
+
+        public void DisplayFlightSchedule()
+        {
+            Console.WriteLine("\n=============================================");
+            Console.WriteLine("Flight Schedule for " + TerminalName);
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+
+            foreach (var flight in flights.Values)
+            {
+                Console.WriteLine($"{flight.FlightNumber}          {flight.Airline.Name}        {flight.Origin}            {flight.Destination}           {flight.ExpectedTime:dd/MM/yyyy hh:mm:ss tt}");
+            }
+        }
+        public void ListBoardingGates()
+        {
+            Console.WriteLine("\n=============================================");
+            Console.WriteLine("List of Boarding Gates for " + TerminalName);
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Gate Name       Supports CFFT   Supports DDJB   Supports LWTT");
+
+            foreach (var gate in boardingGates.Values)
+            {
+                Console.WriteLine(value: $"{gate.GateName}         {gate.supportsCFFT}             {gate.supportsDDJB}              {gate.supportsLWTT}");
+            }
+        }
+
+
+
+
+    }
+}
+
