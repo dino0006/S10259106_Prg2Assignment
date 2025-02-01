@@ -275,43 +275,65 @@ namespace ProgAssignment
 
 
 
-
-        public void AssignBoardingGateToFlight(string flightNumber, string gateName)
+        public void AssignBoardingGatesToFlight()
         {
-            if (!flights.ContainsKey(flightNumber))
+            Console.Write("Enter Flight Number: ");
+            string flightNumber = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(flightNumber) || !flights.ContainsKey(flightNumber))
             {
                 Console.WriteLine("Flight not found.");
                 return;
             }
 
-            var flight = flights[flightNumber];
+            Flight flight = flights[flightNumber];
+            Console.WriteLine($"Flight Details: {flight}");
 
-            if (!boardingGates.ContainsKey(gateName))
+            while (true)
             {
-                Console.WriteLine("Invalid Boarding Gate.");
-                return;
+                Console.Write("Enter Boarding Gate: ");
+                string gateName = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(gateName) || !boardingGates.ContainsKey(gateName))
+                {
+                    Console.WriteLine("Invalid Boarding Gate. Try again.");
+                    continue;
+                }
+
+                if (boardingGates[gateName].AssignedFlight != null)
+                {
+                    Console.WriteLine("Boarding Gate already assigned. Choose another gate.");
+                    continue;
+                }
+
+                flight.AssignedGate = gateName;
+                boardingGates[gateName].AssignedFlight = flight;
+                break;
             }
 
-            var gate = boardingGates[gateName];
-
-            if (gate.AssignedFlight != null)
+            Console.Write("Would you like to update the flight status? (Y/N): ");
+            string updateStatus = Console.ReadLine()?.ToUpper();
+            if (updateStatus == "Y")
             {
-                Console.WriteLine($"Gate {gateName} is already assigned to another flight.");
-                return;
+                Console.Write("Enter new status (Delayed/Boarding/On Time): ");
+                string newStatus = Console.ReadLine();
+                if (!string.IsNullOrEmpty(newStatus))
+                {
+                    flight.Status = newStatus;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid status. Keeping current status.");
+                }
+            }
+            else
+            {
+                flight.Status = "On Time";
             }
 
-            gate.AssignFlight(flight);
-            Console.WriteLine($"Gate {gateName} has been assigned to flight {flightNumber}.");
-
-            Console.Write("Would you like to update the status of the flight (Y/N)? ");
-            if (Console.ReadLine().Trim().ToUpper() == "Y")
-            {
-                Console.WriteLine("Select a new status: Delayed, Boarding, On Time");
-                string newStatus = Console.ReadLine().Trim();
-                flight.Status = newStatus;
-                Console.WriteLine($"Status updated to {newStatus}");
-            }
+            Console.WriteLine("Boarding Gate successfully assigned!");
         }
+
 
 
         public void CreateNewFlight()
