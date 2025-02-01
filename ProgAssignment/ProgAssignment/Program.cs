@@ -45,6 +45,8 @@ using (var lines = new StreamReader("boardinggates.csv"))
 
 Console.WriteLine($"{boardingGates.Count} Boarding Gates Loaded!");
 
+
+
 try
 {
     Terminal terminal = new Terminal("Changi Airport Terminal 5");
