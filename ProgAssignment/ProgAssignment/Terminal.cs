@@ -457,17 +457,21 @@ namespace ProgAssignment
         }
 
         public void DisplayFlightSchedule()
-        {
-            Console.WriteLine("\n=============================================");
-            Console.WriteLine("Flight Schedule for " + TerminalName);
-            Console.WriteLine("=============================================");
-            Console.WriteLine("Flight Number   Airline Name           Origin                 Destination            Expected Departure/Arrival Time");
+{
+    Console.WriteLine("=======================================================================================");
+    Console.WriteLine("{0,-15} {1,-10} {2,-20} {3,-20} {4,-30}", 
+        "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+    Console.WriteLine("---------------------------------------------------------------------------------------");
 
-            foreach (var flight in flights.Values)
-            {
-                Console.WriteLine($"{flight.FlightNumber}          {flight.Airline.Name}        {flight.Origin}            {flight.Destination}           {flight.ExpectedTime:dd/MM/yyyy hh:mm:ss tt}");
-            }
-        }
+    var sortedFlights = flights.Values.OrderBy(f => f.ExpectedTime);
+    
+    foreach (var flight in sortedFlights)
+    {
+        Console.WriteLine("{0,-15} {1,-10} {2,-20} {3,-20} {4,-30}", 
+            flight.FlightNumber, flight.Airline.Code, flight.Origin, flight.Destination, 
+            flight.ExpectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"));
+    }
+}
         public void ListBoardingGates()
         {
             Console.WriteLine("\n=============================================");

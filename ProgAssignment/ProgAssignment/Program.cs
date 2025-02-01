@@ -43,6 +43,8 @@ using (var lines = new StreamReader("boardinggates.csv"))
 
 Console.WriteLine($"{boardingGates.Count} Boarding Gates Loaded!");
 
+
+
 try
 {
     Terminal terminal = new Terminal("Changi Airport Terminal 5");
@@ -72,7 +74,15 @@ try
                 break;
 
             case "2":
-                terminal.ListBoardingGates();
+                Console.WriteLine("\n=================================================");
+                Console.WriteLine(" List of Boarding Gates for Changi Airport Terminal 5 ");
+                Console.WriteLine("=================================================");
+                Console.WriteLine($"{"Gate Name",-10} {"DDJB",-6} {"CFFT",-6} {"LWTT",-6}");
+
+                foreach (var gate in boardingGates.Values)
+                {
+                    Console.WriteLine($"{gate.GateName,-10} {gate.supportsDDJB,-6} {gate.supportsCFFT,-6} {gate.supportsLWTT,-6}");
+                }
                 break;
 
             case "3":
