@@ -14,25 +14,25 @@ namespace ProgAssignment
     public class BoardingGate
     {
         public string GateName { get; private set; }
-        public object AssignedFlight { get; internal set; }
+        public Flight? AssignedFlight { get; private set; }
 
         public bool supportsCFFT;
         public bool supportsDDJB;
         public bool supportsLWTT;
-        public bool SupportsCFFT { get; internal set; }
-        public bool SupportsDDJB { get; internal set; }
-        public bool SupportsLWTT { get; internal set; }
+        public bool SupportsCFFT { get; private set; }
+        public bool SupportsDDJB { get; private set; }
+        public bool SupportsLWTT { get; private set; }
 
         private Flight flight;
 
-        public BoardingGate(string name, bool cfft, bool ddjb, bool lwtt)
+        public BoardingGate(string gatename, bool cfft, bool ddjb, bool lwtt)
         {
-            GateName = name;
+            GateName = gatename;
             supportsCFFT = cfft;
             supportsDDJB = ddjb;
             supportsDDJB = ddjb;
             supportsLWTT = lwtt;
-            flight = null;
+            AssignedFlight = null;
         }
 
         public double CalculateFees()
@@ -51,7 +51,14 @@ namespace ProgAssignment
 
         public void AssignFlight(Flight assignedFlight)
         {
-            flight = assignedFlight;
+            if (assignedFlight == null)
+            {
+                Console.WriteLine("Error: Cannot assign a null flight.");
+                return;
+            }
+
+            AssignedFlight = assignedFlight;
         }
+
     }
 }
