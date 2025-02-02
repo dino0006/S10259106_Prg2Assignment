@@ -15,7 +15,7 @@ namespace testnumber500
     public class NORMFlight : Flight
     {
         public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available")
-            : base(flightNumber, origin, destination, expectedTime, status, airline:null)
+    : base(flightNumber: flightNumber, origin: origin, destination: destination, expectedTime: expectedTime, status: status, airline: null)
         {
         }
 
