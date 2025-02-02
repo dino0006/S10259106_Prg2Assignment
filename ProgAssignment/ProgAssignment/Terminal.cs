@@ -299,21 +299,21 @@ namespace ProgAssignment
                 Console.WriteLine($"Gate {gateName} is already assigned to another flight.");
                 return;
             }
-            else
-            {
-                gate.AssignFlight(flight);
-                Console.WriteLine($"Gate {gateName} has been assigned to flight {flightNumber}.");
 
-                Console.Write("Would you like to update the status of the flight (Y/N)? ");
-                if (Console.ReadLine().Trim().ToUpper() == "Y")
-                {
-                    Console.WriteLine("Select a new status: Delayed, Boarding, On Time");
-                    string newStatus = Console.ReadLine().Trim();
-                    flight.Status = newStatus;
-                    Console.WriteLine($"Status updated to {newStatus}");
-                }
+            gate.AssignFlight(flight);
+            Console.WriteLine($"Gate {gateName} has been assigned to flight {flightNumber}.");
+
+            Console.Write("Would you like to update the status of the flight (Y/N)? ");
+            if (Console.ReadLine().Trim().ToUpper() == "Y")
+            {
+                Console.WriteLine("Select a new status: Delayed, Boarding, On Time");
+                string newStatus = Console.ReadLine().Trim();
+                flight.Status = newStatus;
+                Console.WriteLine($"Status updated to {newStatus}");
             }
         }
+
+
 
 
         public void CreateNewFlight()
