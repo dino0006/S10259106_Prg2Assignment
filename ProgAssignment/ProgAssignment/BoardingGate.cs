@@ -16,37 +16,37 @@ namespace ProgAssignment
         public string GateName { get; private set; }
         public Flight? AssignedFlight { get; private set; }
 
-        public bool supportsCFFT;
-        public bool supportsDDJB;
-        public bool supportsLWTT;
-        public bool SupportsCFFT { get; private set; }
-        public bool SupportsDDJB { get; private set; }
-        public bool SupportsLWTT { get; private set; }
+        public bool SupportsCFFT { get; set; }
+        public bool SupportsDDJB { get; set; }
+        public bool SupportsLWTT { get; set; }
+        public Flight Flight { get; set; }
 
-        private Flight flight;
+        public BoardingGate() { }
 
-        public BoardingGate(string gatename, bool cfft, bool ddjb, bool lwtt)
+
+        public BoardingGate(string gatename, bool cfft, bool ddjb, bool lwtt, Flight flight = null)
         {
             GateName = gatename;
-            supportsCFFT = cfft;
-            supportsDDJB = ddjb;
-            supportsDDJB = ddjb;
-            supportsLWTT = lwtt;
+            SupportsCFFT = cfft;
+            SupportsDDJB = ddjb;
+            SupportsDDJB = ddjb;
+            SupportsLWTT = lwtt;
             AssignedFlight = null;
+            Flight = flight;
         }
 
         public double CalculateFees()
         {
             double fee = 0.0;
-            if (supportsCFFT) fee += 50.0;
-            if (supportsDDJB) fee += 30.0;
-            if (supportsLWTT) fee += 20.0; 
+            if (SupportsCFFT) fee += 50.0;
+            if (SupportsDDJB) fee += 30.0;
+            if (SupportsLWTT) fee += 20.0;
             return fee;
         }
 
         public override string ToString()
         {
-            return $"Gate: {GateName}, Supports CFFT: {supportsCFFT}, Supports DDJB: {supportsDDJB}, Supports LWTT: {supportsLWTT}, Assigned Flight: {(flight != null ? flight.FlightId : "None")}";
+            return $"Gate: {GateName}, Supports CFFT: {SupportsCFFT}, Supports DDJB: {SupportsDDJB}, Supports LWTT: {SupportsLWTT}, Assigned Flight: {(Flight != null ? Flight.FlightId : "None")}";
         }
 
         public void AssignFlight(Flight assignedFlight)

@@ -71,7 +71,7 @@ namespace ProgAssignment
             Status = status;
         }
 
-        public abstract double CalculateFees(); 
+        public abstract double CalculateFees();
 
         public override string ToString()
         {
