@@ -420,6 +420,16 @@ namespace ProgAssignment
         }
         public void ModifyFlightDetails()
         {
+            Console.WriteLine("\n=============================================");
+    Console.WriteLine($"List of Airlines for {TerminalName}");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Airline Code",-15} {"Airline Name",-30}");
+    Console.WriteLine("-------------------------------------------------");
+
+    foreach (var airline in airlines.Values)
+    {
+        Console.WriteLine($"{airline.Code,-15} {airline.Name,-30}");
+    }
             Console.Write("Enter Flight Number to modify: ");
             string flightNumber = Console.ReadLine();
 
@@ -430,7 +440,7 @@ namespace ProgAssignment
             }
 
             Flight flight = flights[flightNumber];
-            Console.WriteLine($"Current Flight Details: {flight}");
+            Console.WriteLine($"Current Flight Details:\nFlight Number: {flight.FlightNumber}, Origin: {flight.Origin}, Destination: {flight.Destination}, Expected Time: {flight.ExpectedTime:hh:mm tt}, Status: {flight.Status}");
 
             Console.Write("Enter new status (or leave blank to keep current): ");
             string newStatus = Console.ReadLine();
@@ -454,6 +464,33 @@ namespace ProgAssignment
             }
 
             Console.WriteLine("Flight details updated.");
+
+            SaveUpdatedFlightsToFile();
+        }
+
+        private void SaveUpdatedFlightsToFile()
+        {
+            string filePath = "flights.csv";
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(filePath))
+                {
+                    // Writing the header row
+                    sw.WriteLine("Flight Number,Origin,Destination,Expected Departure/Arrival,Special Request Code");
+
+                    foreach (var flight in flights.Values)
+                    {
+                        sw.WriteLine($"{flight.FlightNumber},{flight.Origin},{flight.Destination},{flight.ExpectedTime:hh:mm tt},{flight.Status}");
+                    }
+                }
+
+                Console.WriteLine("Flight details saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving flight details: {ex.Message}");
+            }
         }
 
         public void DisplayFlightSchedule()

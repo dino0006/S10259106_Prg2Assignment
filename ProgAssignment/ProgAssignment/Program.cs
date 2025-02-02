@@ -86,12 +86,12 @@ try
                 break;
 
             case "3":
-                Console.Write("Enter Flight Number: ");
+                /*Console.Write("Enter Flight Number: ");
                 string flightNumber = Console.ReadLine();
                 Console.Write("Enter Boarding Gate Name: ");
                 string gateName = Console.ReadLine();
-                terminal.AssignBoardingGateToFlight(flightNumber, gateName);
-                break;
+                terminal.AssignBoardingGatesToFlight(flightNumber, gateName);
+                break; */
 
             case "4":
                 terminal.CreateNewFlight();

@@ -69,7 +69,7 @@ namespace ProgAssignment
             Airline = airline;
         }
 
-        public abstract double CalculateFees();
+        public abstract double CalculateFees(); 
 
         public override string ToString()
         {
