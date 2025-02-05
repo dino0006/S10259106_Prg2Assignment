@@ -429,7 +429,7 @@ void ModifyFlightDetails()
             Console.WriteLine("Flight deleted successfully.");
             SaveUpdatedFlightsToFile();
         }
-        else
+        else if (status == "3")
         {
             Console.WriteLine("Flight deletion cancelled.");
         }
@@ -484,6 +484,8 @@ void ModifyFlightDetails()
     }
 }
 
+        NORMFlight flightdata = new NORMFlight(flightNumber, origin, destination, ExpectedTime, RequestCode);
+        FlightDictionary.Add(flightNumber, flightdata);
 
 
 
@@ -513,6 +515,8 @@ void DisplayFlightSchedule()
     }
     Flight.Sort((f1, f2) => f1.ExpectedTime.CompareTo(f2.ExpectedTime));
 
+        Console.WriteLine("Would You Like to Add Another Flight? (Y/N)");
+        string answer = Console.ReadLine();
 
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -638,6 +642,7 @@ while (!finish)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
+
 }
 
 
