@@ -270,7 +270,7 @@ void CreateNewFlight()
 void DisplayAirlineFlights()
 {
     Console.Write("Enter Airline Code: ");
-    string airlineCode = Console.ReadLine();
+    string airlineCode = Console.ReadLine()?.ToUpper();
 
     if (airlines.ContainsKey(airlineCode))
     {
