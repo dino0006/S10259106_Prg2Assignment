@@ -17,6 +17,8 @@ namespace ProgAssignment
         public string Code { get; set; }
         public Dictionary<string, Flight> Flights { get; set; } = new();
 
+        public Airline() { }
+
         public Airline(string name, string code)
         {
             Name = name;
