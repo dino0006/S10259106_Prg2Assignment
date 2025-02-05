@@ -11,7 +11,7 @@ using testnumber500;
 
 namespace ProgAssignment
 {
-    public class Flight
+    public abstract class Flight
     {
         private string flightNumber;
         public string FlightNumber
