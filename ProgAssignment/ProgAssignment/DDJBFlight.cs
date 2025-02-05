@@ -23,11 +23,12 @@ namespace testnumber500
             set { requestFee = value; }
         }
 
-        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", double requestFee = 0.0) :
-            base(flightNumber, origin, destination, expectedTime, status, airline: null)
+        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", double requestFee = 0.0)
+    : base(flightNumber: flightNumber, origin: origin, destination: destination, expectedTime: expectedTime, status: status, airline: null)
         {
             this.requestFee = requestFee;
         }
+
 
         public override double CalculateFees()
         {

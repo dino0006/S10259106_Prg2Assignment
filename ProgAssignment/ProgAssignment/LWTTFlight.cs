@@ -18,8 +18,8 @@ namespace testnumber500
             set { }
         }
 
-        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available") :
-            base(flightNumber, origin, destination, expectedTime, status, airline: null)
+        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available")
+    : base(flightNumber: flightNumber, origin: origin, destination: destination, expectedTime: expectedTime, status: status, airline: null)
         {
         }
 

@@ -13,7 +13,8 @@ namespace testnumber500
         public double RequestFee { get; set; }
 
         public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "Available", double requestFee = 0.0)
-            : base(flightNumber, origin, destination, expectedTime, status, airline: null)
+            : base(flightNumber, origin, destination, expectedTime, status: status, airline: null)
+
         {
             this.RequestFee = requestFee;
         }
